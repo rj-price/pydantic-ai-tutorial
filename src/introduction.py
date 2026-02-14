@@ -71,7 +71,7 @@ class ResponseModel(BaseModel):
 
 agent2 = Agent(
     model=model,
-    result_type=ResponseModel,
+    output_type=ResponseModel,
     system_prompt=(
         "You are an intelligent customer support agent. "
         "Analyze queries carefully and provide structured responses."
@@ -79,7 +79,7 @@ agent2 = Agent(
 )
 
 response = agent2.run_sync("How can I track my order #12345?")
-print(response.data.model_dump_json(indent=2))
+print(response.output.model_dump_json(indent=2))
 
 
 # --------------------------------------------------------------
