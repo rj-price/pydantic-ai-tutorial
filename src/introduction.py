@@ -9,7 +9,7 @@ from typing import Dict, List, Optional
 import nest_asyncio
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent, ModelRetry, RunContext, Tool
-from pydantic_ai.models.openai import OpenAIModel
+from pydantic_ai.models.openai import OpenAIResponsesModel
 
 from utils.markdown import to_markdown
 
@@ -17,7 +17,7 @@ from utils.markdown import to_markdown
 nest_asyncio.apply()
 
 
-model = OpenAIModel("gpt-4o")
+model = OpenAIResponsesModel("gpt-4o")
 
 # --------------------------------------------------------------
 # 1. Simple Agent - Hello World Example
@@ -37,16 +37,16 @@ agent1 = Agent(
 
 # Example usage of basic agent
 response = agent1.run_sync("How can I track my order #12345?")
-print(response.data)
+print(response.output)
 print(response.all_messages())
-print(response.cost())
+print(response.usage())
 
 
 response2 = agent1.run_sync(
     user_prompt="What was my previous question?",
     message_history=response.new_messages(),
 )
-print(response2.data)
+print(response2.output)
 
 # --------------------------------------------------------------
 # 2. Agent with Structured Response
