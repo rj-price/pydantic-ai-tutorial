@@ -116,7 +116,7 @@ class CustomerDetails(BaseModel):
 # Agent with structured output and dependencies
 agent5 = Agent(
     model=model,
-    result_type=ResponseModel,
+    output_type=ResponseModel,
     deps_type=CustomerDetails,
     retries=3,
     system_prompt=(
@@ -145,17 +145,17 @@ customer = CustomerDetails(
 response = agent5.run_sync(user_prompt="What did I order?", deps=customer)
 
 response.all_messages()
-print(response.data.model_dump_json(indent=2))
+print(response.output.model_dump_json(indent=2))
 
 print(
     "Customer Details:\n"
     f"Name: {customer.name}\n"
     f"Email: {customer.email}\n\n"
     "Response Details:\n"
-    f"{response.data.response}\n\n"
+    f"{response.output.response}\n\n"
     "Status:\n"
-    f"Follow-up Required: {response.data.follow_up_required}\n"
-    f"Needs Escalation: {response.data.needs_escalation}"
+    f"Follow-up Required: {response.output.follow_up_required}\n"
+    f"Needs Escalation: {response.output.needs_escalation}"
 )
 
 
