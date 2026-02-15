@@ -114,7 +114,7 @@ class CustomerDetails(BaseModel):
 
 
 # Agent with structured output and dependencies
-agent5 = Agent(
+agent3 = Agent(
     model=model,
     output_type=ResponseModel,
     deps_type=CustomerDetails,
@@ -128,7 +128,7 @@ agent5 = Agent(
 
 
 # Add dynamic system prompt based on dependencies
-@agent5.system_prompt
+@agent3.system_prompt
 async def add_customer_name(ctx: RunContext[CustomerDetails]) -> str:
     return f"Customer details: {to_markdown(ctx.deps)}"  # These depend in some way on context that isn't known until runtime
 
@@ -142,7 +142,7 @@ customer = CustomerDetails(
     ],
 )
 
-response = agent5.run_sync(user_prompt="What did I order?", deps=customer)
+response = agent3.run_sync(user_prompt="What did I order?", deps=customer)
 
 response.all_messages()
 print(response.output.model_dump_json(indent=2))
@@ -182,7 +182,7 @@ def get_shipping_info(ctx: RunContext[CustomerDetails]) -> str:
 
 
 # Agent with structured output and dependencies
-agent5 = Agent(
+agent4 = Agent(
     model=model,
     output_type=ResponseModel,
     deps_type=CustomerDetails,
@@ -197,12 +197,12 @@ agent5 = Agent(
 )
 
 
-@agent5.system_prompt
+@agent4.system_prompt
 async def add_customer_name(ctx: RunContext[CustomerDetails]) -> str:
     return f"Customer details: {to_markdown(ctx.deps)}"
 
 
-response = agent5.run_sync(
+response = agent4.run_sync(
     user_prompt="What's the status of my last order?", deps=customer
 )
 
@@ -240,6 +240,7 @@ shipping_info_db: Dict[str, str] = {
     "#67890": "Out for delivery",
 }
 
+# Error in incoming customer query (missing # in order ID) to demonstrate self-correction
 customer = CustomerDetails(
     customer_id="1",
     name="John Doe",
